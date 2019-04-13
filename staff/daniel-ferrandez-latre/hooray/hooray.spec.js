@@ -36,7 +36,6 @@ describe('hooray', function () {
     describe('push', function () {
         !true && it('should add a value at the end of an hooray', function () {
             var hooray = new Hooray(1, 2, 3);
-
             var length = hooray.push(4);
 
             expect(hooray.length, 4);
@@ -105,4 +104,30 @@ describe('hooray', function () {
             }
         });
     });
+
+    describe('concat', function() {
+        true && it('should return a new hooray with all parameters passed within it', function(){
+            var hooray1 = new Hooray(1, 2, 3);
+            var hooray2 = new Hooray(4, 5, 6);
+        
+            var hoorayCheck = new Hooray(1, 2, 3, 4, 5, 6);
+            debugger
+            hooray1.concat(hooray2);
+            expect(hooray1).toEqual(hoorayCheck);
+        });
+
+        !true && it ('Shoul return two arrays String hoorays combined in one', function() {
+            var hooray1 = new Hooray('a', 'b', 'c');
+            var hooray2 = new Hooray('d', 'e', 'f');
+        
+            var hoorayCheck = new Hooray('a', 'b', 'c', 'd', 'e', 'f');
+        
+            hooray1.concat(hooray2);
+            expect(hooray1, hoorayCheck, true);
+        });
+
+    });
+ 
+    
+
 });

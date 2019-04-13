@@ -46,3 +46,31 @@ Hooray.prototype.forEach = function (callback) {
             forEach(index);
     })(0);
 }
+
+/**
+ * @param {*} values The value to push in the hooray.
+ * 
+ * @returns {hooray} Returns a new hooray with all parameters passed within it.
+ * 
+ */
+
+Hooray.prototype.concat = function () {
+    if (!(arguments[0] instanceof Hooray)) throw TypeError(arguments[0] + ' is not a Hooray');
+
+    var hooray = new Hooray();
+
+    for(var i = 0; i < this.length; i++) {
+        hooray.push(this[i]);
+    }
+    if(arguments.length > 0) {
+        for(var i = 0; i < arguments.length; i++) {
+            if(arguments[i] instanceof Hooray) {
+                for(var j = 0; j < arguments[i].length; j++){
+                    hooray.push(argumensts[j]);
+                }
+            }
+            hooray.push(arguments[i]);
+        }
+    } 
+    return hooray; 
+}
