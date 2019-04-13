@@ -4,8 +4,14 @@
  * 
  */
 function Hooray() {
-        for (var i = 0; i < arguments.length; i++) this[i] = arguments[i];
-        this.length = arguments.length;
+    var first = arguments[0];
+
+    if (arguments.length === 1 && typeof first === 'number')
+        if (parseInt(first) !== first) throw RangeError('Invalid hooray');
+        else return this.length = first;
+
+    for (var i = 0; i < arguments.length; i++) this[i] = arguments[i];
+    this.length = arguments.length;
 }
 
 /**
@@ -15,14 +21,12 @@ function Hooray() {
 * 
 * @returns {number} The length of the hooray after adding the new value.
 */
-Hooray.prototype.push = function(value) {
-   
+Hooray.prototype.push = function (value) {
     if (arguments.length > 0)
-        for(var i = 0; i < arguments.length; i++)
+        for (var i = 0; i < arguments.length; i++)
             this[this.length++] = arguments[i];
 
-    // return (typeof value  === 'undefined') ? this.length++ : this.length;
-   return this.length--;
+    return this.length;
 }
 
 /**
@@ -30,15 +34,15 @@ Hooray.prototype.push = function(value) {
  * 
  * @param {Function} callback The expression to evaluate.
  */
-Hooray.prototype.forEach = function(callback) {
-	if (typeof callback !== 'function') throw new TypeError(callback + ' is not a function');
+Hooray.prototype.forEach = function (callback) {
+    if (typeof callback !== 'function') throw new TypeError(callback + ' is not a function');
 
     var self = this;
 
-	this.length && (function forEach(index) {
-		callback(self[index], index);
+    this.length && (function forEach(index) {
+        callback(self[index], index);
 
-		if (++index < self.length)
-			forEach(index);
-	})(0);
+        if (++index < self.length)
+            forEach(index);
+    })(0);
 }
