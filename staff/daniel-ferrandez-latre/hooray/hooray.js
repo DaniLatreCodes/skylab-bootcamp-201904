@@ -55,8 +55,6 @@ Hooray.prototype.forEach = function (callback) {
  */
 
 Hooray.prototype.concat = function () {
-    if (!(arguments[0] instanceof Hooray)) throw TypeError(arguments[0] + ' is not a Hooray');
-
     var hooray = new Hooray();
 
     for(var i = 0; i < this.length; i++) {
@@ -66,11 +64,49 @@ Hooray.prototype.concat = function () {
         for(var i = 0; i < arguments.length; i++) {
             if(arguments[i] instanceof Hooray) {
                 for(var j = 0; j < arguments[i].length; j++){
-                    hooray.push(argumensts[j]);
+                    hooray.push(arguments[i][j]);
                 }
+            } else {
+                hooray.push(arguments[i]);
             }
-            hooray.push(arguments[i]);
         }
-    } 
-    return hooray; 
+    }
+        return hooray;  
+}
+
+/**
+ * Iterates the current hooray and evaluates an expression on each of its values to see 
+ * whether are all equal or not.
+ * 
+ * @param {Function} callback The expression to evaluate.
+ */
+
+Hooray.prototype.every = function(callback) {
+
+    if(arguments.length === 0) {
+        throw TypeError(' undefined is not a callback.');
+    } else if (typeof arguments[0] !== 'function') {
+        throw new TypeError(arguments[0] + ' is not a callback.');
+    }
+
+    for(var i = 0; i < this.length; i++){
+        if(!callback(this[i])) return false;
+    }
+    return true;
+}
+
+Hooray.prototype.indexOf = function() {
+
+
+
+    var index = 0;
+    if(arguments[1] > this.length) {
+        return -1;
+    }else if(arguments[1] < 0) {
+        if(!((arguments[1] + this.length) < 0)) index = this.length + arguments[1];
+    }
+    for(var i = index; i < this.length; i++) {
+        if(this[i] === arguments[0]) return i;
+    }
+    return -1;
 }

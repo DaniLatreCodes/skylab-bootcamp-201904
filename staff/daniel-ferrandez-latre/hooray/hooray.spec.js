@@ -1,6 +1,7 @@
 'use strict';
 
 describe('hooray', function () {
+
     describe('constructor', function () {
         true && it('should construct an empty hooray when no arguments', function () {
             var hooray = new Hooray;
@@ -111,21 +112,115 @@ describe('hooray', function () {
             var hooray2 = new Hooray(4, 5, 6);
         
             var hoorayCheck = new Hooray(1, 2, 3, 4, 5, 6);
-            debugger
-            hooray1.concat(hooray2);
-            expect(hooray1).toEqual(hoorayCheck);
+            // debugger
+            var hoorayResult = hooray1.concat(hooray2);
+            expect(hoorayResult).toEqual(jasmine.objectContaining(hoorayCheck));
         });
 
-        !true && it ('Shoul return two arrays String hoorays combined in one', function() {
+        true && it ('should return two arrays String hoorays combined in one', function() {
             var hooray1 = new Hooray('a', 'b', 'c');
             var hooray2 = new Hooray('d', 'e', 'f');
         
             var hoorayCheck = new Hooray('a', 'b', 'c', 'd', 'e', 'f');
-        
-            hooray1.concat(hooray2);
-            expect(hooray1, hoorayCheck, true);
+            var hoorayResult = hooray1.concat(hooray2);
+            expect(hoorayResult).toEqual(jasmine.objectContaining(hoorayCheck));
         });
 
+        true && it ('should return when no parameters are passed one new array with the content was already within it', function() {
+            var hoorayResult = new Hooray('a', 'b', 'c');
+        
+            var hoorayCheck = new Hooray('a', 'b', 'c');
+            hoorayResult = hoorayResult.concat();
+            expect(hoorayResult).toEqual(jasmine.objectContaining(hoorayCheck));
+        });
+
+        true && it ('should return an alphanumeric hooray when itself have alphabet chars and numbers are added by argumen alone or whithin an another hooray ', function() {
+            var hoorayAlphaNumericResult = new Hooray('a', 'b', 'c');
+        
+            var hoorayCheck = new Hooray('a', 'b', 'c', 1, 2, 3);
+            hoorayAlphaNumericResult = hoorayAlphaNumericResult.concat(1, new Hooray(2, 3));
+            expect(hoorayAlphaNumericResult).toEqual(jasmine.objectContaining(hoorayCheck));
+        });
+
+        true && it ('should concat undefined value into hooray whet its passes by argument', function() {
+            var hooray = new Hooray('a', 'b', 'c');
+            var expectedHorray = new Hooray('a', 'b', 'c', undefined)
+                hooray = hooray.concat(undefined);
+ 
+                expect(hooray).toEqual(jasmine.objectContaining(expectedHorray));
+            
+        });
+
+    });
+
+    describe('every', function() {
+        it('should return true once all hooray elements checked are equals.', function() {
+            var booleanResult;
+            var hooray = new Hooray(2, 2, 2);
+
+            booleanResult = hooray.every(function(v) { return v === 2});
+            expect(booleanResult).toBeTruthy();
+        });
+
+        it('should return false once all hooray elements checked are equals.', function() {
+            var booleanResult;
+            var hooray = new Hooray(2, 1, 2);
+
+            booleanResult = hooray.every(function(v) { return v === 2});
+            expect(booleanResult).toBeFalsy();
+        });
+
+        it('should break when no arguments are passed.', function() {
+            
+            var hooray = new Hooray(2, 1, 2);
+            try{
+                hooray.every();
+                throw new Error(' should not get here.');
+            }catch(error) {
+                expect(error.message).toBe(' undefined is not a callback.');
+            }
+        });
+
+
+        it('should break when not a callback is passed.', function() {
+            
+            var hooray = new Hooray(2, 1, 2);
+            try{
+                var num = 5;
+                hooray.every(num);
+                throw new Error(' should not get here.');
+            }catch(error) {
+                expect(error.message).toBe(num + ' is not a callback.');
+            }
+        });
+    });
+
+    describe('indexOf', function() {
+        it('should return the index possition of a given element whithin a hooray.', function() {
+            var hooray = new Hooray('a', 'b', 'c', 1, 2, 3);
+            var indexCheck = hooray.indexOf('c');
+
+            expect(indexCheck).toBe(2);
+        });
+
+        it('should return the index possition of a given element whithin a hooray strating from certain index.', function() {
+            var hooray = new Hooray('a', 'b', 'c', 1, 2, 3);
+            var indexCheck = hooray.indexOf(2, 1);
+
+            expect(indexCheck).toBe(4);
+        });
+        it('should return -1 when no arguments are passed.', function() {
+            var hooray = new Hooray('a', 'b', 'c', 1, 2, 3);
+            var resultCheck = hooray.indexOf();
+
+            expect(resultCheck).toBe(-1);
+        });
+        it('should return -1 when no arguments are passed.', function() {
+            var hooray = new Hooray('a', 'b', 'c', 1, 2, 3);
+            var resultCheck = hooray.indexOf();
+
+            expect(resultCheck).toBe(-1);
+        });
     });
  
     
