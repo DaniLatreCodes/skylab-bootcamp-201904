@@ -195,6 +195,39 @@ describe('hooray', function () {
         });
     });
 
+    describe('filter', function() {
+        it('should return the index possition of a given element whithin a hooray.', function() {
+            var hooray = new Hooray(8, 2, 9, 5, 2, 3);
+            var hoorayResult = hooray.filter(function(element){return element % 2 === 0 });
+            var hoorayExpected = new Hooray(8, 2, 2);
+
+            expect(hoorayResult).toEqual(hoorayExpected);
+        });
+        it('should break when no arguments are passed.', function() {
+            
+            var hooray = new Hooray(8, 2, 9, 5, 2, 3);
+            try{
+                hooray.filter();
+                throw new Error(' should not get here.');
+            }catch(error) {
+                expect(error.message).toBe(undefined + ' is not a callback.');
+            }
+        });
+
+        it('should break when not a callback is passed.', function() {
+            
+            var hooray = new Hooray(8, 2, 9, 5, 2, 3);
+            try{
+                var num = 5;
+                hooray.filter(num);
+                throw new Error(' should not get here.');
+            }catch(error) {
+                expect(error.message).toBe(num + ' is not a callback.');
+            }
+        });
+
+    });
+
     describe('indexOf', function() {
         it('should return the index possition of a given element whithin a hooray.', function() {
             var hooray = new Hooray('a', 'b', 'c', 1, 2, 3);

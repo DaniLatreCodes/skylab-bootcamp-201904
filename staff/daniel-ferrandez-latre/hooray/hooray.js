@@ -95,9 +95,37 @@ Hooray.prototype.every = function(callback) {
     return true;
 }
 
+/**
+ * Return a new array with the filtered results
+ *
+ * @param {Function} callback The expression to evalute.
+ */
+
+ Hooray.prototype.filter = function(callback) {
+
+    if(arguments.length ===0){
+        throw TypeError(undefined + ' is not a callback.');
+    } else if (typeof arguments[0] !== 'function') {
+        throw new TypeError(arguments[0] + ' is not a callback.');
+    }
+
+
+    var hoorayFilter = new Hooray();
+    for(var i = 0; i < this.length; i++) {
+        if(callback(this[i])) {
+            hoorayFilter.push(this[i]);
+        }
+    }
+    return hoorayFilter;
+ }
+
+/**
+ * Iterates the current hooray and resturn the current index of the element passed
+ * 
+ * @param {*} value The expression to evaluate.
+ */
+
 Hooray.prototype.indexOf = function() {
-
-
 
     var index = 0;
     if(arguments[1] > this.length) {
