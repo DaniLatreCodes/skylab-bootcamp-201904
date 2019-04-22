@@ -1,21 +1,38 @@
-'use strict';
+'use strict'
 
-function Home(container, onSearch) {
-    Component.call(this, container);
+class Home extends Component {
+    constructor(container, onSearch, onDetail) {
+        super(container)
 
-    var form = this.container.children[1];
-    new Search(form, onSearch);
+        const form = this.container.children[1]
+        new Search(form, onSearch)
 
-    var ul = this.container.children[2];
-    var results = new Results(ul);
-    this.__results__ = results;
-}
+        const ul = this.container.children[2]
+        const results = new Results(ul, onDetail)
+        this.__results__ = results
+        this.__results__.visible = false
 
-Home.prototype = Object.create(Component.prototype);
-Home.prototype.constructor = Home;
-
-Object.defineProperty(Home.prototype, 'results', {
-    set: function(results) {
-        this.__results__.items = results;
+        const section = this.container.children[3]
+        const detail = new Detail(section)
+        this.__detail__ = detail
+        this.__detail__.visible = false
     }
-})
+
+    set results(results) {
+        this.__detail__.visible = false
+        this.__results__.items = results
+        this.__results__.visible = true
+    }
+
+    set detail(detail) {
+        this.__results__.visible = false
+        this.__detail__.item = detail
+        this.__detail__.visible = true
+    }
+
+    set name(name) {
+        const h1 = this.container.children[0]
+
+        h1.innerText = 'Hello, ' + name + '!'
+    }
+}
