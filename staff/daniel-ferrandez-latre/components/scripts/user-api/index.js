@@ -2,8 +2,9 @@
 
 const userApi = {
     __url__: 'https://skylabcoders.herokuapp.com/api',
+    __timeout__: 0,
 
-    __call__(path, method, body, token ,callback) {
+    __call__(path, method, body, token, callback) {
         validate.arguments([
             { name: 'path', value: path, type: 'string', notEmpty: true },
             { name: 'method', value: method, type: 'string', notEmpty: true },
@@ -14,20 +15,36 @@ const userApi = {
 
         const xhr = new XMLHttpRequest
 
-        xhr.open(method, `${this.__url__}/${path}`)
-       
+        xhr.timeout = this.__timeout__
 
-        if(token) xhr.setRequestHeader('Authorization', 'Bearer ' + token)
-        xhr.addEventListener('load', function () {
-            callback(JSON.parse(this.responseText))
-        })
+        xhr.open(method, `${this.__url__}/${path}`)
+
+        // xhr.addEventListener('load', function () {
+        //     callback(JSON.parse(this.responseText))
+        // })
+
+        xhr.onload = function () {
+            callback(undefined, JSON.parse(this.responseText))
+        }
+
+        xhr.onerror = function() {
+            callback(new ConnectionError('cannot connect'))
+        }
+
+        xhr.ontimeout = () => {
+            callback(new TimeoutError(`time out, exceeded limit of ${this.__timeout__}ms`))
+        }
+        
+        if (token) xhr.setRequestHeader('Authorization', `Bearer ${token}`)
+
         if (method === 'GET') {
-            
+            if(!token) throw Error('token not provided') // WARN this is because all our GET requests require token (Alicia's idea!)
+
             if (body) throw Error('cannot send body in GET request')
             else xhr.send()
         } else {
             if (body) {
-                xhr.setRequestHeader('content-type', 'application/json')
+                xhr.setRequestHeader('Content-Type', 'application/json')
                 xhr.send(JSON.stringify(body))
             } else xhr.send()
         }
@@ -42,10 +59,7 @@ const userApi = {
             { value: callback, type: 'function' }
         ])
 
-        // TODO validate inputs
-
-        this.__call__('/user', 'POST', { name, surname, username, password }, null, callback)
-        // this.__call__('/user', 'POST', undefined, callback)
+        this.__call__('/user', 'POST', { name, surname, username, password }, undefined, callback)
     },
 
     authenticate(username, password, callback) {
@@ -55,18 +69,16 @@ const userApi = {
             { value: callback, type: 'function' }
         ])
 
-        this.__call__('/auth', 'POST', { username, password }, null, callback)
-
-        
+        this.__call__('/auth', 'POST', { username, password }, undefined, callback)
     },
 
     retrieve(id, token, callback) {
         validate.arguments([
-            { name: 'token', value: token, type: 'string', notEmpty: true },
             { name: 'id', value: id, type: 'string', notEmpty: true },
+            { name: 'token', value: token, type: 'string', notEmpty: true },
             { value: callback, type: 'function' }
         ])
-        
-        this.__call__(`/user/${id}`, 'GET', null, token , callback)
+
+        this.__call__(`/user/${id}`, 'GET', undefined, token, callback)
     }
 }
