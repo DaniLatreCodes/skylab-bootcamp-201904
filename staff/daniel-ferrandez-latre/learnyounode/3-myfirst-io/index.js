@@ -1,8 +1,12 @@
-const [,,rute] = process.argv
-let fs = require('fs')
+const fs = require('fs')
 
-let arr = fs.readFileSync(rute)
+const { argv: [, , path] } = process
 
-arr = arr.toString().split('\n')
+debugger
 
-console.log(arr.length - 1)
+
+const content = fs.readFileSync(path, 'utf8')
+
+const lines = content.match(/\n/g).length
+
+console.log(lines)
