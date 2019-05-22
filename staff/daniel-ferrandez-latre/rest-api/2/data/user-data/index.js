@@ -5,7 +5,7 @@ const validate = require('../../common/validate')
 const { ValueError } = require('../../common/errors')
 
 const userData = {
-    __file__: path.join(__dirname, 'users.json'),
+    col: null, 
 
     async __load__() {
 
@@ -29,14 +29,7 @@ const userData = {
         validate.arguments([
             { name: 'user', value: user, type: 'object', optional: false }
         ])
-        user.id = uuid()
-
-        return (async ()=> {
-            const users = await this.__load__()
-            users.push(user)
-
-            return await this.__save__()
-        })()
+        return (async ()=> { await this.col.insertOne(user) })()
     },
 
     list() {

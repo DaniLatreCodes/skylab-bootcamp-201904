@@ -1,14 +1,27 @@
 const userData = require('.')
 const file = require('../../common/utils/file')
 const path = require('path')
+const mongodb = require('mongodb')
 require('../../common/utils/array-random.polyfill')
+
+const _url='mongodb://localhost/rest-api-test'
 
 userData.__file__ = path.join(__dirname, 'users.test.json')
 
+
+
 describe('user data', () => {
+    let users
+    beforeAll(async () => {
+        const client = await mongodb.connect(_url, {useNewUrlParser: true})
+        const db = client.db()
+        users = db.collection('users')
+
+        userData.col = users
+    })
     const names = ['Pepito', 'Fulanito', 'Menganito']
 
-    const users = new Array(Math.random(100)).fill().map(() => ({
+    const _users = new Array(Math.random(100)).fill().map(() => ({
         id: `123-${Math.random()}`,
         name: `${names.random()}-${Math.random()}`,
         surname: `Grillo-${Math.random()}`,
@@ -16,12 +29,10 @@ describe('user data', () => {
         password: `123-${Math.random()}`
     }))
 
-    beforeEach(() => delete userData.__users__)
-
+    beforeEach(() => users.deleteMany())
     describe('create', () => {
-        beforeEach(() => file.writeFile(userData.__file__, '[]'))
 
-        it('should succeed on correct data', () => {
+        fit('should succeed on correct data', () => {
             const user = {
                 name: 'Manuel',
                 surname: 'Barzi',
@@ -30,18 +41,23 @@ describe('user data', () => {
             }
                 return (async ()=> {
                     await userData.create(user)
-                    expect(typeof user.id).toBe('string')
-                    const content = await file.readFile(userData.__file__, 'utf8')
+                    
+                    console.log(user) //database injects an id
+                    expect(user._id).toBeInstanceOf(mongodb.ObjectId) 
+
+                    const content = await users.find()
+                    
                     expect(content).toBeDefined()
 
-                    const users = JSON.parse(content)
+                    const _users = []
+                    await content.forEach(user => _users.push(user))
+                
+                    expect(_users).toHaveLength(1)
 
-                    expect(users).toHaveLength(1)
-
-                    const [_user] = users
-
+                    //const [_user] = users
+                    const dbuser = _users[0] 
                     // expect(_user).toMatchObject(user) 
-                    expect(_user).toEqual(user)
+                    expect(dbuser).toEqual(user)
                 })()
         })
     })
@@ -155,5 +171,5 @@ describe('user data', () => {
         })
     })
 
-    afterAll(() => file.writeFile(userData.__file__, '[]'))
+    afterAll(() => client.close())
 })
