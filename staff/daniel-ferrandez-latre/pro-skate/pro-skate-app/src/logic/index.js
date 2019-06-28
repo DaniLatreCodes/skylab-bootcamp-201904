@@ -80,7 +80,7 @@ const logic = {
 
     return (async () => {
       try {
-        await dataApi.updateUser(name, surname, email, password, age);
+        await dataApi.updateUser( this.__userToken__, name, surname, email, password, age);
       } catch (err) {
         throw new LogicError(err.message);
       }

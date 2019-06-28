@@ -38,7 +38,7 @@ function Navbar({ history, quantity }) {
                 :
                 <div className='navbar-end  '>
                 <NavCard quantity={quantity} />
-                <a className='navbar-item navbar-item is-size-5' onClick={e => history.push("/login")}>
+                <a className='navbar-item navbar-item is-size-5' onClick={e => history.push("/profile")}>
                   Profile
                 </a>
                 <a

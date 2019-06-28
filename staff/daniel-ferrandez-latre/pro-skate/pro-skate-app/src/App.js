@@ -10,6 +10,7 @@ import Register from "./components/Register";
 import Login from "./components/Login";
 import Detail from './components/Detail'
 import Cart from './components/Cart'
+import Profile from './pages/Profile'
 import logic from './logic';
 import './index.sass'
 
@@ -102,7 +103,8 @@ function App({history}) {
         <Route  path='/register' render={() => <Register />} />
         <Route  path='/login' render={() => <Login />} />
         <Route  path='/detail/:id' render={() => <Detail cartItemsQuantity={cartItemsQuantity}/>} /> 
-        <Route  exact='/cart' render={() => logic.isUserLoggedIn ? <Cart cartItems={cartItems} cartItemsQuantity={cartItemsQuantity} totalAmount={totalAmount} /> : console.log('hola') } />
+        <Route  path='/profile' render={() => logic.isUserLoggedIn ? <Profile/> : ''} />
+        <Route  exact='/cart' render={() => logic.isUserLoggedIn ? <Cart cartItems={cartItems} cartItemsQuantity={cartItemsQuantity} totalAmount={totalAmount} /> : ''} />
       </Switch>
     </div>
   );
